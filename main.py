@@ -4,7 +4,7 @@ import random
 size = (400, 400) # x, y
 textsize = 40
 fnt = ImageFont.truetype("italic font.ttf", textsize)
-text = "luaq"
+text = "tika"
 color = '#000000'
 
 img = Image.new('RGB', size, color = color)
