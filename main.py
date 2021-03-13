@@ -1,15 +1,27 @@
 from PIL import Image, ImageDraw, ImageFont
 import random
 
-size = (400, 400) # x, y
-textsize = 40
+# size = (400, 400) # x, y
+
+# img = Image.new('RGB', size, color = color)
+
+bg = Image.open("bg.jpg")
+bg = bg.convert('L')
+bg.save("bgc.jpg")
+
+img = Image.open("bgc.jpg")
+img = img.convert("RGBA")
+size = img.size
+
+textsize = round(size[0] / 10)
 fnt = ImageFont.truetype("italic font.ttf", textsize)
 text = "tika"
-color = '#000000'
+color = '#00000000'
 
-img = Image.new('RGB', size, color = color)
-d = ImageDraw.Draw(img)
-tw, th = d.textsize(text, font=fnt)
+txtlayer = Image.new('RGBA', size, color = color)
+
+d = ImageDraw.Draw(txtlayer)
+tw, th = d.textsize(text, font = fnt)
 
 textarea = ((size[0]-tw)/2, (size[1]-th)/2)
 bluearea = (((size[0]-tw)/2) + 2, (size[1]-th)/2)
@@ -29,7 +41,9 @@ for x in range(3):
 	y = random.randint(minY, maxY)
 
 	# box=(left, upper, right, lower)
-	region = img.crop((0, y, size[0]-movement, y+width))
-	img.paste(region, (movement, y, size[0], y+width))
+	region = txtlayer.crop((0, y, size[0]-movement, y+width))
+	txtlayer.paste(region, (movement, y, size[0], y+width))
 
-img.save("out.png")
+img.paste(txtlayer, (0, 0), txtlayer)
+
+img.save("out.png", optimize=True)
